@@ -169,6 +169,12 @@
 	{
 		_defaultFontDescriptor.fontFamily = @"Times New Roman";
 	}
+    
+    NSNumber *traitsDefault = [_options objectForKey:DTDefaultFontStyle];
+	if (traitsDefault)
+	{
+		_defaultFontDescriptor.symbolicTraits = (CTFontSymbolicTraits)[traitsDefault integerValue];
+	}
 	
 	_defaultLinkColor = [_options objectForKey:DTDefaultLinkColor];
 	
@@ -218,6 +224,13 @@
 		_defaultParagraphStyle.alignment = (CTTextAlignment)[defaultTextAlignmentNum integerValue];
 	}
 	
+    NSNumber *defaultLineBreakNum = [_options objectForKey:DTDefaultLineBreakMode];
+	
+	if (defaultLineBreakNum)
+	{
+		_defaultParagraphStyle.linebreak = (CTLineBreakMode)[defaultLineBreakNum integerValue];
+	}
+	
 	NSNumber *defaultFirstLineHeadIndent = [_options objectForKey:DTDefaultFirstLineHeadIndent];
 	if (defaultFirstLineHeadIndent)
 	{
@@ -234,6 +247,12 @@
 	if (defaultListIndent)
 	{
 		_defaultParagraphStyle.listIndent = [defaultListIndent integerValue];
+	}
+	
+    NSNumber *defaultTailIndent = [_options objectForKey:DTDefaultTailIndent];
+	if (defaultTailIndent)
+	{
+		_defaultParagraphStyle.tailIndent = [defaultTailIndent integerValue];
 	}
 	
 	_defaultTag = [[DTHTMLElement alloc] init];
@@ -465,6 +484,28 @@
 	};
 	[_tagStartHandlers setObject:[h6Block copy] forKey:@"h6"];
 	
+    void (^smallBlock)(void) = ^
+	{
+		_currentTag.fontDescriptor.pointSize -= _textScale * 1;
+	};
+	[_tagStartHandlers setObject:[smallBlock copy] forKey:@"small"];
+	
+    void (^bigBlock)(void) = ^
+	{
+		_currentTag.fontDescriptor.pointSize += _textScale * 1;
+	};
+	[_tagStartHandlers setObject:[bigBlock copy] forKey:@"big"];
+	
+	void (^backgroundColorBlock)(void) = ^
+	{
+		NSString *color = [_currentTag attributeForKey:@"color"];
+		
+		if (color)
+		{
+			_currentTag.backgroundColor = [DTColor colorWithHTMLName:color];
+		}
+	};
+	[_tagStartHandlers setObject:[backgroundColorBlock copy] forKey:@"backgroundColor"];
 	
 	void (^fontBlock)(void) = ^
 	{
@@ -492,7 +533,7 @@
 				break;
 			case 3:
 			default:
-				_currentTag.fontDescriptor.pointSize = _defaultFontDescriptor.pointSize;
+//				_currentTag.fontDescriptor.pointSize = _defaultFontDescriptor.pointSize;
 				break;
 		}
 		

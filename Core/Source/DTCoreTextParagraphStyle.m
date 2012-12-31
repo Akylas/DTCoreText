@@ -22,6 +22,7 @@
 	CGFloat _maximumLineHeight;
 	
 	CTTextAlignment _alignment;
+	CTLineBreakMode _linebreak;
 	CTWritingDirection _baseWritingDirection;
 	
 	NSMutableArray *_tabStops;
@@ -71,6 +72,28 @@
 			break;
 	}
 	
+    switch(paragraphStyle.lineBreakMode)
+	{
+		case NSLineBreakByCharWrapping:
+			retStyle.alignment = kCTLineBreakByCharWrapping;
+			break;
+		case NSLineBreakByClipping:
+			retStyle.alignment = kCTLineBreakByClipping;
+			break;
+		case NSLineBreakByTruncatingHead:
+			retStyle.alignment = kCTLineBreakByTruncatingHead;
+			break;
+		case NSLineBreakByTruncatingMiddle:
+			retStyle.alignment = kCTLineBreakByTruncatingMiddle;
+			break;
+		case NSLineBreakByTruncatingTail:
+			retStyle.alignment = kCTLineBreakByTruncatingTail;
+			break;
+        case NSLineBreakByWordWrapping:
+			retStyle.alignment = kCTLineBreakByWordWrapping;
+			break;
+	}
+	
 	switch (paragraphStyle.baseWritingDirection)
 	{
 		case NSWritingDirectionNatural:
@@ -97,6 +120,7 @@
 		_defaultTabInterval = 36.0;
 		_baseWritingDirection = kCTWritingDirectionNatural;
 		_alignment = kCTNaturalTextAlignment;
+		_linebreak = kCTLineBreakByCharWrapping;
 		_lineHeightMultiple = 0.0;
 		_minimumLineHeight = 0.0;
 		_maximumLineHeight = 0.0;
@@ -114,6 +138,9 @@
 	{
 		// text alignment
 		CTParagraphStyleGetValueForSpecifier(ctParagraphStyle, kCTParagraphStyleSpecifierAlignment,sizeof(_alignment), &_alignment);
+		
+        // line break
+		CTParagraphStyleGetValueForSpecifier(ctParagraphStyle, kCTParagraphStyleSpecifierLineBreakMode,sizeof(_linebreak), &_linebreak);
 		
 		// indents
 		CTParagraphStyleGetValueForSpecifier(ctParagraphStyle, kCTParagraphStyleSpecifierFirstLineHeadIndent, sizeof(_firstLineHeadIndent), &_firstLineHeadIndent);
@@ -180,6 +207,7 @@
 	CTParagraphStyleSetting settings[] = 
 	{
 		{kCTParagraphStyleSpecifierAlignment, sizeof(_alignment), &_alignment},
+		{kCTParagraphStyleSpecifierLineBreakMode, sizeof(_linebreak), &_linebreak},
 		{kCTParagraphStyleSpecifierFirstLineHeadIndent, sizeof(_firstLineHeadIndent), &_firstLineHeadIndent},
 		{kCTParagraphStyleSpecifierDefaultTabInterval, sizeof(_defaultTabInterval), &_defaultTabInterval},
 		
@@ -242,6 +270,28 @@
 			break;
 	}
 	
+    switch(_linebreak)
+	{
+		case kCTLineBreakByCharWrapping:
+			[mps setLineBreakMode:NSLineBreakByCharWrapping];
+			break;
+        case kCTLineBreakByTruncatingHead:
+			[mps setLineBreakMode:NSLineBreakByTruncatingHead];
+			break;
+        case kCTLineBreakByClipping:
+			[mps setLineBreakMode:NSLineBreakByClipping];
+			break;
+        case kCTLineBreakByTruncatingMiddle:
+			[mps setLineBreakMode:NSLineBreakByTruncatingMiddle];
+			break;
+        case kCTLineBreakByTruncatingTail:
+			[mps setLineBreakMode:NSLineBreakByTruncatingTail];
+			break;
+        case kCTLineBreakByWordWrapping:
+			[mps setLineBreakMode:NSLineBreakByWordWrapping];
+			break;
+	}
+	
 	switch (_baseWritingDirection) {
 		case  kCTWritingDirectionNatural:
 			[mps setBaseWritingDirection:NSWritingDirectionNatural];
@@ -294,6 +344,28 @@
 			[retString appendString:@"text-align:justify;"];
 			break;
 		case kCTNaturalTextAlignment:
+			// no output, this is default
+			break;
+	}
+	
+    switch (_linebreak)
+	{
+		case kCTLineBreakByCharWrapping:
+			[retString appendString:@"word-break:break-all;word-wrap:break-word;"];
+			break;
+		case kCTLineBreakByClipping:
+			[retString appendString:@"word-wrap:normal;"];
+			break;
+		case kCTLineBreakByTruncatingHead:
+			//			[retString appendString:@"text-align:center;"];
+			break;
+		case kCTLineBreakByTruncatingMiddle:
+			//			[retString appendString:@"text-align:justify;"];
+			break;
+        case kCTLineBreakByWordWrapping:
+			[retString appendString:@"word-break:keep-all;word-wrap:break-word;"];
+			break;
+		case kCTLineBreakByTruncatingTail:
 			// no output, this is default
 			break;
 	}
@@ -373,6 +445,7 @@
 	newObject.headIndent = self.headIndent;
 	newObject.listIndent = self.listIndent;
 	newObject.alignment = self.alignment;
+	newObject.linebreak = self.linebreak;
 	newObject.baseWritingDirection = self.baseWritingDirection;
 	newObject.tabStops = self.tabStops; // copy
 	newObject.textLists = self.textLists; //copy
@@ -402,6 +475,7 @@
 @synthesize tailIndent = _tailIndent;
 @synthesize listIndent = _listIndent;
 @synthesize alignment = _alignment;
+@synthesize linebreak = _linebreak;
 @synthesize textLists = _textLists;
 @synthesize textBlocks = _textBlocks;
 @synthesize baseWritingDirection = _baseWritingDirection;

@@ -13,14 +13,17 @@ NSString * const NSAttachmentAttributeName = @"NSAttachmentAttributeName";
 
 NSString * const DTMaxImageSize = @"DTMaxImageSize";
 NSString * const DTDefaultFontFamily = @"DTDefaultFontFamily";
+NSString * const DTDefaultFontStyle = @"DTDefaultFontStyle";
 NSString * const DTDefaultTextColor = @"DTDefaultTextColor";
 NSString * const DTDefaultLinkColor = @"DTDefaultLinkColor";
 NSString * const DTDefaultLinkDecoration = @"DTDefaultLinkDecoration";
 NSString * const DTDefaultTextAlignment = @"DTDefaultTextAlignment";
+NSString * const DTDefaultLineBreakMode = @"DTDefaultLineBreakMode";
 NSString * const DTDefaultLineHeightMultiplier = @"DTDefaultLineHeightMultiplier";
 NSString * const DTDefaultFirstLineHeadIndent = @"DTDefaultFirstLineHeadIndent";
 NSString * const DTDefaultHeadIndent = @"DTDefaultHeadIndent";
 NSString * const DTDefaultListIndent = @"DTDefaultListIndent";
+NSString * const DTDefaultTailIndent = @"DTDefaultTailIndent";
 NSString * const DTDefaultStyleSheet = @"DTDefaultStyleSheet";
 NSString * const DTUseiOS6Attributes = @"DTUseiOS6Attributes";
 NSString * const DTWillFlushBlockCallBack = @"DTWillFlushBlockCallBack";

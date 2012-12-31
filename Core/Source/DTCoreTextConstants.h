@@ -16,15 +16,18 @@ extern NSString * const NSAttachmentAttributeName;
 
 extern NSString * const DTMaxImageSize;
 extern NSString * const DTDefaultFontFamily;
+extern NSString * const DTDefaultFontStyle;
 extern NSString * const DTDefaultTextColor;
 extern NSString * const DTDefaultLinkColor;
 extern NSString * const DTDefaultLinkDecoration;
 extern NSString * const DTDefaultTextAlignment;
+extern NSString * const DTDefaultLineBreakMode;
 extern NSString * const DTDefaultLineHeightMultiplier;
 extern NSString * const DTDefaultLineHeightMultiplier;
 extern NSString * const DTDefaultFirstLineHeadIndent;
 extern NSString * const DTDefaultHeadIndent;
 extern NSString * const DTDefaultListIndent;
+extern NSString * const DTDefaultTailIndent;
 extern NSString * const DTDefaultStyleSheet;
 extern NSString * const DTUseiOS6Attributes;
 extern NSString * const DTWillFlushBlockCallBack;
