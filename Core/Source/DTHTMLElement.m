@@ -72,7 +72,11 @@ NSDictionary *_classesForNames = nil;
 	self = [super initWithName:name attributes:attributes];
 	if (self)
 	{
-		
+		NSString *bgColor = [styles objectForKey:@"bgcolor"];
+		if (bgColor)
+		{
+			self.backgroundColor = [DTColor colorWithHTMLName:bgColor];
+		}
 	}
 	
 	return self;
