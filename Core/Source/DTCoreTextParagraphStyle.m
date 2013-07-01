@@ -9,6 +9,7 @@
 #import "DTCoreTextParagraphStyle.h"
 #import "DTTextBlock.h"
 #import "DTCSSListStyle.h"
+#import "DTWeakSupport.h"
 
 #if !TARGET_OS_IPHONE
 #import <CommonCrypto/CommonDigest.h>
@@ -25,7 +26,6 @@ typedef struct {
 	CGFloat paragraphSpacing;
 	CGFloat headIndent;
 	CGFloat tailIndent;
-	CGFloat listIndent;
 	CGFloat lineHeightMultiple;
 	CGFloat minimumLineHeight;
 	CGFloat maximumLineHeight;
@@ -42,7 +42,6 @@ typedef struct {
 	CGFloat _paragraphSpacing;
 	CGFloat _headIndent;
 	CGFloat _tailIndent;
-	CGFloat _listIndent;
 	CGFloat _lineHeightMultiple;
 	CGFloat _minimumLineHeight;
 	CGFloat _maximumLineHeight;
@@ -69,7 +68,7 @@ typedef struct {
 	return [[DTCoreTextParagraphStyle alloc] initWithCTParagraphStyle:ctParagraphStyle];
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_5_1
+#if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
 + (DTCoreTextParagraphStyle *)paragraphStyleWithNSParagraphStyle:(NSParagraphStyle *)paragraphStyle
 {
 	DTCoreTextParagraphStyle *retStyle = [[DTCoreTextParagraphStyle alloc] init];
@@ -156,7 +155,6 @@ typedef struct {
 		_minimumLineHeight = 0.0;
 		_maximumLineHeight = 0.0;
 		_paragraphSpacing = 0.0;
-		_listIndent = 0;
 	}
 	
 	return self;
@@ -186,7 +184,7 @@ typedef struct {
 		// tab stops
 		CTParagraphStyleGetValueForSpecifier(ctParagraphStyle, kCTParagraphStyleSpecifierDefaultTabInterval, sizeof(_defaultTabInterval), &_defaultTabInterval);
 		
-		__unsafe_unretained NSArray *stops; // Could use a CFArray too, leave as a reminder how to do this in the future
+		DT_WEAK_VARIABLE NSArray *stops; // Could use a CFArray too, leave as a reminder how to do this in the future
 		if (CTParagraphStyleGetValueForSpecifier(ctParagraphStyle, kCTParagraphStyleSpecifierTabStops, sizeof(stops), &stops))
 		{
 			self.tabStops = stops;
@@ -254,7 +252,7 @@ typedef struct {
 	allvalues_t *allvalues = &allvalues_stack; // pointer so that we can use the arrow operator
 #endif
 	
-	*allvalues = (allvalues_t){0,0,0,0,0,0,0,0,0,0,0,0, nil};
+	*allvalues = (allvalues_t){0,0,0,0,0,0,0,0,0,0,0,0};
 
 	// pack all values in the struct
 	allvalues->firstLineHeadIndent = _firstLineHeadIndent;
@@ -263,7 +261,6 @@ typedef struct {
 	allvalues->paragraphSpacing = _paragraphSpacing;
 	allvalues->headIndent = _headIndent;
 	allvalues->tailIndent = _tailIndent;
-	allvalues->listIndent = _listIndent;
 	allvalues->lineHeightMultiple = _lineHeightMultiple;
 	allvalues->minimumLineHeight = _minimumLineHeight;
 	allvalues->maximumLineHeight = _maximumLineHeight;
@@ -337,7 +334,7 @@ typedef struct {
 	return ret;
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_5_1
+#if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
 - (NSParagraphStyle *)NSParagraphStyle
 {
 	NSMutableParagraphStyle *mps = [[NSMutableParagraphStyle alloc] init];
@@ -352,28 +349,40 @@ typedef struct {
 	[mps setHeadIndent:_headIndent];
 	[mps setTailIndent:_tailIndent];
 	
-	// _listIndent not supported
-	
 	[mps setMinimumLineHeight:_minimumLineHeight];
 	[mps setMaximumLineHeight:_maximumLineHeight];
 	
 	switch(_alignment)
 	{
 		case kCTLeftTextAlignment:
+		{
 			[mps setAlignment:NSTextAlignmentLeft];
 			break;
+		}
+			
 		case kCTRightTextAlignment:
+		{
 			[mps setAlignment:NSTextAlignmentRight];
 			break;
+		}
+			
 		case kCTCenterTextAlignment:
+		{
 			[mps setAlignment:NSTextAlignmentCenter];
 			break;
+		}
+			
 		case kCTJustifiedTextAlignment:
+		{
 			[mps setAlignment:NSTextAlignmentJustified];
 			break;
+		}
+			
 		case kCTNaturalTextAlignment:
+		{
 			[mps setAlignment:NSTextAlignmentNatural];
 			break;
+		}
 	}
 	
     switch(_linebreak)
@@ -398,16 +407,25 @@ typedef struct {
 			break;
 	}
 	
-	switch (_baseWritingDirection) {
+	switch (_baseWritingDirection)
+	{
 		case  kCTWritingDirectionNatural:
+		{
 			[mps setBaseWritingDirection:NSWritingDirectionNatural];
 			break;
+		}
+			
 		case  kCTWritingDirectionLeftToRight:
+		{
 			[mps setBaseWritingDirection:NSWritingDirectionLeftToRight];
 			break;
+		}
+			
 		case  kCTWritingDirectionRightToLeft:
+		{
 			[mps setBaseWritingDirection:NSWritingDirectionRightToLeft];
 			break;
+		}
 	}
 
 	// _tap stops not supported
@@ -550,7 +568,6 @@ typedef struct {
 	newObject.minimumLineHeight = self.minimumLineHeight;
 	newObject.maximumLineHeight = self.maximumLineHeight;
 	newObject.headIndent = self.headIndent;
-	newObject.listIndent = self.listIndent;
 	newObject.alignment = self.alignment;
 	newObject.linebreak = self.linebreak;
 	newObject.baseWritingDirection = self.baseWritingDirection;
@@ -685,7 +702,6 @@ typedef struct {
 @synthesize maximumLineHeight = _maximumLineHeight;
 @synthesize headIndent = _headIndent;
 @synthesize tailIndent = _tailIndent;
-@synthesize listIndent = _listIndent;
 @synthesize alignment = _alignment;
 @synthesize linebreak = _linebreak;
 @synthesize textLists = _textLists;

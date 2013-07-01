@@ -14,7 +14,7 @@
 {
 	DTAttributedTextContentView *_attributedTextContextView;
 	
-	__unsafe_unretained id <DTAttributedTextContentViewDelegate> _textDelegate;
+	DT_WEAK_VARIABLE id <DTAttributedTextContentViewDelegate> _textDelegate;
 	
 	NSUInteger _htmlHash; // preserved hash to avoid relayouting for same HTML
 	
@@ -133,6 +133,8 @@
 	NSData *data = [html dataUsingEncoding:NSUTF8StringEncoding];
 	NSAttributedString *string = [[NSAttributedString alloc] initWithHTMLData:data documentAttributes:NULL];
 	self.attributedString = string;
+	
+	[self setNeedsLayout];
 }
 
 - (void)setAttributedString:(NSAttributedString *)attributedString
