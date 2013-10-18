@@ -14,8 +14,8 @@
 #import "DTStylesheetHTMLElement.h"
 #import "DTTextAttachmentHTMLElement.h"
 
-#import "DTVersion.h"
 #import "NSString+DTFormatNumbers.h"
+#import "DTLog.h"
 
 @interface DTHTMLAttributedStringBuilder ()
 
@@ -128,10 +128,14 @@
 		encoding = CFStringConvertEncodingToNSStringEncoding(cfEncoding);
 	}
 	
+#if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
+	
 	// custom option to use iOS 6 attributes if running on iOS 6
 	if ([[_options objectForKey:DTUseiOS6Attributes] boolValue])
 	{
-		if (![DTVersion osVersionIsLessThen:@"6.0"])
+#if TARGET_OS_IPHONE
+		// NS-attributes only supported running on iOS 6.0 or greater
+		if (floor(NSFoundationVersionNumber) >= DTNSFoundationVersionNumber_iOS_6_0)
 		{
 			___useiOS6Attributes = YES;
 		}
@@ -139,12 +143,14 @@
 		{
 			___useiOS6Attributes = NO;
 		}
+#else
+		// Mac generally supports it
+		___useiOS6Attributes = YES;
+#endif
 	}
-	else
-	{
-		// default is not to use them because many features are not supported
-		___useiOS6Attributes = NO;
-	}
+	
+#endif
+
 	
 	// custom option to scale text
 	_textScale = [[_options objectForKey:NSTextSizeMultiplierDocumentOption] floatValue];
@@ -210,11 +216,11 @@
 		if ([_defaultLinkColor isKindOfClass:[NSString class]])
 		{
 			// convert from string to color
-			_defaultLinkColor = [DTColor colorWithHTMLName:(NSString *)_defaultLinkColor];
+			_defaultLinkColor = DTColorCreateWithHTMLName((NSString *)_defaultLinkColor);
 		}
 		
 		// get hex code for the passed color
-		NSString *colorHex = [_defaultLinkColor htmlHexString];
+		NSString *colorHex = DTHexStringFromDTColor(_defaultLinkColor);
 		
 		// overwrite the style
 		NSString *styleBlock = [NSString stringWithFormat:@"a {color:#%@;}", colorHex];
@@ -240,11 +246,11 @@
 		if ([defaultLinkHighlightColor isKindOfClass:[NSString class]])
 		{
 			// convert from string to color
-			defaultLinkHighlightColor = [DTColor colorWithHTMLName:(NSString *)defaultLinkHighlightColor];
+			defaultLinkHighlightColor = DTColorCreateWithHTMLName((NSString *)defaultLinkHighlightColor);
 		}
 		
 		// get hex code for the passed color
-		NSString *colorHex = [defaultLinkHighlightColor htmlHexString];
+		NSString *colorHex = DTHexStringFromDTColor(defaultLinkHighlightColor);
 		
 		// overwrite the style
 		NSString *styleBlock = [NSString stringWithFormat:@"a:active {color:#%@;}", colorHex];
@@ -310,7 +316,7 @@
 		else
 		{
 			// need to convert first
-			_defaultTag.textColor = [DTColor colorWithHTMLName:defaultColor];
+			_defaultTag.textColor = DTColorCreateWithHTMLName(defaultColor);
 		}
 	}
 	
@@ -337,7 +343,7 @@
 	CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
 	
 	// output metrics
-	NSLog(@"DTCoreText created string from %@ HTML in %.2f sec", [NSString stringByFormattingBytes:[_data length]], endTime-startTime);
+	DTLogInfo((@"DTCoreText created string from %@ HTML in %.2f sec", [NSString stringByFormattingBytes:[_data length]], endTime-startTime);
 #endif
 	
 	return result;
@@ -433,6 +439,7 @@
 		
 		// append this list style to the current paragraph style text lists
 		NSMutableArray *textLists = [_currentTag.paragraphStyle.textLists mutableCopy];
+		
 		if (!textLists)
 		{
 			textLists = [NSMutableArray array];
@@ -577,7 +584,7 @@
 		
 		if (color)
 		{
-			_currentTag.textColor = [DTColor colorWithHTMLName:color];
+			_currentTag.textColor = DTColorCreateWithHTMLName(color);
 		}
 	};
 	
@@ -617,6 +624,37 @@
 	
 	[_tagEndHandlers setObject:[objectBlock copy] forKey:@"object"];
 
+	void (^videoBlock)(void) = ^
+	{
+		if ([_currentTag isKindOfClass:[DTTextAttachmentHTMLElement class]])
+		{
+			DTTextAttachmentHTMLElement *attachmentElement = (DTTextAttachmentHTMLElement *)_currentTag;
+			
+			if ([attachmentElement.textAttachment isKindOfClass:[DTVideoTextAttachment class]])
+			{
+				DTVideoTextAttachment *videoAttachment = (DTVideoTextAttachment *)attachmentElement.textAttachment;
+				
+				// find first child that has a source
+				if (!videoAttachment.contentURL)
+				{
+					for (DTHTMLElement *child in attachmentElement.childNodes)
+					{
+						if ([child.name isEqualToString:@"source"])
+						{
+							NSString *src = [child attributeForKey:@"src"];
+							
+							// content URL
+							videoAttachment.contentURL = [NSURL URLWithString:src relativeToURL:_baseURL];
+							
+							break;
+						}
+					}
+				}
+			}
+		}
+	};
+	
+	[_tagEndHandlers setObject:[videoBlock copy] forKey:@"video"];
 	
 	void (^styleBlock)(void) = ^
 	{
@@ -644,8 +682,9 @@
 					[_globalStyleSheet mergeStylesheet:localSheet];
 				}
 			}
-			else {
-				NSLog(@"WARNING: css link referencing a non-local target, ignored");
+			else
+			{
+				DTLogWarning(@"CSS link referencing a non-local target, ignored");
 			}
 		}
 	};
@@ -811,7 +850,7 @@
 									if ([_tmpString length] && ![[_tmpString string] hasSuffix:@"\n"])
 									{
 										// trim off whitespace
-										while ([[_tmpString string] hasSuffixCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]])
+										while ([[_tmpString string] hasSuffixCharacterFromSet:[NSCharacterSet ignorableWhitespaceCharacterSet]])
 										{
 											[_tmpString deleteCharactersInRange:NSMakeRange([_tmpString length]-1, 1)];
 										}

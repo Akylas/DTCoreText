@@ -10,6 +10,7 @@
 #import "DTTextBlock.h"
 #import "DTCSSListStyle.h"
 #import "DTWeakSupport.h"
+#import "DTCoreTextFunctions.h"
 
 @implementation DTCoreTextParagraphStyle
 {
@@ -43,6 +44,8 @@
 #if DTCORETEXT_SUPPORT_NS_ATTRIBUTES
 + (DTCoreTextParagraphStyle *)paragraphStyleWithNSParagraphStyle:(NSParagraphStyle *)paragraphStyle
 {
+	NSParameterAssert(paragraphStyle);
+	
 	DTCoreTextParagraphStyle *retStyle = [[DTCoreTextParagraphStyle alloc] init];
 	
 	retStyle.firstLineHeadIndent = paragraphStyle.firstLineHeadIndent;
@@ -55,24 +58,7 @@
 	retStyle.minimumLineHeight = paragraphStyle.minimumLineHeight;
 	retStyle.maximumLineHeight = paragraphStyle.maximumLineHeight;
 	
-	switch(paragraphStyle.alignment)
-	{
-		case NSTextAlignmentLeft:
-			retStyle.alignment = kCTLeftTextAlignment;
-			break;
-		case NSTextAlignmentRight:
-			retStyle.alignment = kCTRightTextAlignment;
-			break;
-		case NSTextAlignmentCenter:
-			retStyle.alignment = kCTCenterTextAlignment;
-			break;
-		case NSTextAlignmentJustified:
-			retStyle.alignment = kCTJustifiedTextAlignment;
-			break;
-		case NSTextAlignmentNatural:
-			retStyle.alignment = kCTNaturalTextAlignment;
-			break;
-	}
+	retStyle.alignment = DTNSTextAlignmentToCTTextAlignment(paragraphStyle.alignment);
 	
     switch(paragraphStyle.lineBreakMode)
 	{
@@ -99,15 +85,52 @@
 	switch (paragraphStyle.baseWritingDirection)
 	{
 		case NSWritingDirectionNatural:
+		{
 			retStyle.baseWritingDirection = kCTWritingDirectionNatural;
 			break;
+		}
+			
 		case NSWritingDirectionLeftToRight:
+		{
 			retStyle.baseWritingDirection = kCTWritingDirectionLeftToRight;
 			break;
+		}
 		case NSWritingDirectionRightToLeft:
+		{
 			retStyle.baseWritingDirection = kCTWritingDirectionRightToLeft;
 			break;
+		}
 	}
+	
+#if DTCORETEXT_SUPPORT_NSPARAGRAPHSTYLE_TABS
+	if (NSClassFromString(@"NSTextTab") && [NSParagraphStyle instancesRespondToSelector:@selector(tabStops)])
+	{
+		NSArray *tabStops = [paragraphStyle valueForKey:@"tabStops"];
+		
+		NSMutableArray *tmpArray = [NSMutableArray array];
+		
+		for (NSTextTab *textTab in tabStops)
+		{
+			CTTextAlignment alignment = DTNSTextAlignmentToCTTextAlignment(textTab.alignment);
+			CGFloat location = textTab.location;
+			
+			CTTextTabRef tab = CTTextTabCreate(alignment, location, NULL);
+			
+			if (tab)
+			{
+				[tmpArray addObject:(__bridge id)(tab)];
+				CFRelease(tab);
+			}
+		}
+		
+		if ([tmpArray count])
+		{
+			retStyle.tabStops = tmpArray;
+		}
+	}
+	
+	retStyle.defaultTabInterval = paragraphStyle.defaultTabInterval;
+#endif
 	
 	return retStyle;
 }
@@ -219,8 +242,6 @@
 
 	[mps setFirstLineHeadIndent:_firstLineHeadIndent];
 
-	// _defaultTabInterval not supported
-
 	[mps setParagraphSpacing:_paragraphSpacing];
 	[mps setParagraphSpacingBefore:_paragraphSpacingBefore];
 	
@@ -230,38 +251,7 @@
 	[mps setMinimumLineHeight:_minimumLineHeight];
 	[mps setMaximumLineHeight:_maximumLineHeight];
 	
-	switch(_alignment)
-	{
-		case kCTLeftTextAlignment:
-		{
-			[mps setAlignment:NSTextAlignmentLeft];
-			break;
-		}
-			
-		case kCTRightTextAlignment:
-		{
-			[mps setAlignment:NSTextAlignmentRight];
-			break;
-		}
-			
-		case kCTCenterTextAlignment:
-		{
-			[mps setAlignment:NSTextAlignmentCenter];
-			break;
-		}
-			
-		case kCTJustifiedTextAlignment:
-		{
-			[mps setAlignment:NSTextAlignmentJustified];
-			break;
-		}
-			
-		case kCTNaturalTextAlignment:
-		{
-			[mps setAlignment:NSTextAlignmentNatural];
-			break;
-		}
-	}
+	[mps setAlignment:DTNSTextAlignmentFromCTTextAlignment(_alignment)];
 	
     switch(_linebreak)
 	{
@@ -305,8 +295,39 @@
 			break;
 		}
 	}
-
-	// _tap stops not supported
+	
+#if DTCORETEXT_SUPPORT_NSPARAGRAPHSTYLE_TABS
+	if (NSClassFromString(@"NSTextTab") && [NSParagraphStyle instancesRespondToSelector:@selector(tabStops)])
+	{
+		NSMutableArray *tabs = [NSMutableArray array];
+		
+		for (id object in _tabStops)
+		{
+			CTTextTabRef tab = (__bridge CTTextTabRef)(object);
+			
+			CTTextAlignment alignment = CTTextTabGetAlignment(tab);
+			NSTextAlignment nsAlignment = DTNSTextAlignmentFromCTTextAlignment(alignment);
+			CGFloat location = (CGFloat)CTTextTabGetLocation(tab);
+			
+			NSTextTab *textTab = [[NSTextTab alloc] initWithTextAlignment:nsAlignment location:location options:[NSDictionary dictionary]];
+			
+			if (!textTab)
+			{
+				break;
+			}
+			
+			[tabs addObject:textTab];
+		}
+		
+		if ([tabs count])
+		{
+			[mps setValue:tabs forKey:@"tabStops"];
+		}
+		
+		mps.defaultTabInterval = _defaultTabInterval;
+	}
+#endif
+	
 	return (NSParagraphStyle *)mps;
 }
 #endif
@@ -454,6 +475,101 @@
 	newObject.textBlocks = self.textBlocks; //copy
 	
 	return newObject;
+}
+
+#pragma mark - Comparing
+
+- (BOOL)isEqual:(id)object
+{
+	if (object == self)
+	{
+		return YES;
+	}
+	
+	if (!object)
+	{
+		return NO;
+	}
+	
+	if (![object isKindOfClass:[DTCoreTextParagraphStyle class]])
+	{
+		return NO;
+	}
+	
+	DTCoreTextParagraphStyle *otherStyle = object;
+	
+	
+	if (_firstLineHeadIndent != otherStyle->_firstLineHeadIndent)
+	{
+		return NO;
+	}
+	
+	if (_headIndent != otherStyle->_headIndent)
+	{
+		return NO;
+	}
+
+	if (_tailIndent != otherStyle->_tailIndent)
+	{
+		return NO;
+	}
+	
+	if (_defaultTabInterval != otherStyle->_defaultTabInterval)
+	{
+		return NO;
+	}
+	
+	if (_paragraphSpacing != otherStyle->_paragraphSpacing)
+	{
+		return NO;
+	}
+	
+	if (_paragraphSpacingBefore != otherStyle->_paragraphSpacingBefore)
+	{
+		return NO;
+	}
+
+	if (_lineHeightMultiple != otherStyle->_lineHeightMultiple)
+	{
+		return NO;
+	}
+	
+	if (_minimumLineHeight != otherStyle->_minimumLineHeight)
+	{
+		return NO;
+	}
+	
+	if (_maximumLineHeight != otherStyle->_maximumLineHeight)
+	{
+		return NO;
+	}
+	
+	if (_alignment != otherStyle->_alignment)
+	{
+		return NO;
+	}
+	
+	if (_baseWritingDirection != otherStyle->_baseWritingDirection)
+	{
+		return NO;
+	}
+	
+	if (_textLists && ![_textLists isEqualToArray:otherStyle->_textLists])
+	{
+		return NO;
+	}
+
+	if (_textBlocks && ![_textBlocks isEqualToArray:otherStyle->_textBlocks])
+	{
+		return NO;
+	}
+	
+	if (_tabStops && ![_tabStops isEqualToArray:otherStyle->_tabStops])
+	{
+		return NO;
+	}
+	
+	return YES;
 }
 
 #pragma mark Properties

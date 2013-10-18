@@ -10,8 +10,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import <MediaPlayer/MediaPlayer.h>
 
-#import "DTVersion.h"
 #import "DTTiledLayerWithoutFade.h"
+
 
 @interface DemoTextViewController ()
 - (void)_segmentedControlChanged:(id)sender;
@@ -56,10 +56,12 @@
 	{
 		NSMutableArray *items = [[NSMutableArray alloc] initWithObjects:@"View", @"Ranges", @"Chars", @"HTML", nil];
 		
-		if (![DTVersion osVersionIsLessThen:@"6.0"])
+#ifdef DTCORETEXT_SUPPORT_NS_ATTRIBUTES
+		if (floor(NSFoundationVersionNumber) >= DTNSFoundationVersionNumber_iOS_6_0)
 		{
 			[items addObject:@"iOS 6"];
 		}
+#endif
 		
 		_segmentedControl = [[UISegmentedControl alloc] initWithItems:items];
 		_segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
@@ -569,7 +571,7 @@
 	{
 		// somecolorparameter has a HTML color
 		NSString *colorName = [attachment.attributes objectForKey:@"somecolorparameter"];
-		UIColor *someColor = [UIColor colorWithHTMLName:colorName];
+		UIColor *someColor = DTColorCreateWithHTMLName(colorName);
 		
 		UIView *someView = [[UIView alloc] initWithFrame:frame];
 		someView.backgroundColor = someColor;

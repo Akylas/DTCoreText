@@ -8,7 +8,7 @@
 
 #import "DTCoreTextFontDescriptor.h"
 #import "DTCoreTextFontCollection.h"
-#import "DTVersion.h"
+#import "DTCompatibility.h"
 
 static NSCache *_fontCache = nil;
 static NSMutableDictionary *_fontOverrides = nil;
@@ -77,17 +77,16 @@ static BOOL _needsChineseFontCascadeFix = NO;
 	
 #if TARGET_OS_IPHONE
 	// workaround for iOS 5.x bug: global font cascade table has incorrect bold font for Chinese characters in Chinese locale
-	
-	
-	DTVersion *version = [DTVersion osVersion];
-	
-	// seems to be fixed in iOS 6
-	if (version.major<6)
+	if (NSFoundationVersionNumber < DTNSFoundationVersionNumber_iOS_6_0)
 	{
 		_needsChineseFontCascadeFix = YES;
 	}
 #endif
-	
+}
+
+// preloads all available system fonts for faster font matching
++ (void)asyncPreloadFontLookupTable
+{
 	// asynchronically load all available fonts into override table
 	[self _createDictionaryOfAllAvailableFontOverrideNamesWithCompletion:^(NSDictionary *dictionary) {
 		
@@ -285,6 +284,9 @@ static BOOL _needsChineseFontCascadeFix = NO;
 	return self;
 }
 
+#ifndef COVERAGE
+// exclude method from coverage testing
+
 - (NSString *)description
 {
 	NSMutableString *string = [NSMutableString string];
@@ -352,6 +354,8 @@ static BOOL _needsChineseFontCascadeFix = NO;
 	
 	return string;
 }
+
+#endif
 
 - (NSDictionary *)fontAttributes
 {
@@ -601,8 +605,12 @@ static BOOL _needsChineseFontCascadeFix = NO;
 	{
 		matchingFont = CTFontCreateWithFontDescriptor(matchingFontDescriptor, _pointSize, NULL);
 		
-		CFRelease(searchingFontDescriptor);
 		CFRelease(matchingFontDescriptor);
+	}
+	
+	if (searchingFontDescriptor)
+	{
+		CFRelease(searchingFontDescriptor);
 	}
 	
 	// check if we indeed got an oblique font if we wanted one
@@ -646,7 +654,55 @@ static BOOL _needsChineseFontCascadeFix = NO;
 
 - (BOOL)isEqual:(id)object
 {
-	return (([object isKindOfClass:[DTCoreTextFontDescriptor class]]) && ([self hash] == [object hash]));
+	if (!object)
+	{
+		return NO;
+	}
+	
+	if (object == self)
+	{
+		return YES;
+	}
+	
+	if (![object isKindOfClass:[DTCoreTextFontDescriptor class]])
+	{
+		return NO;
+	}
+	
+	DTCoreTextFontDescriptor *otherFontDescriptor = object;
+	
+	if (_pointSize != otherFontDescriptor->_pointSize)
+	{
+		return NO;
+	}
+	
+	if (_stylisticClass != otherFontDescriptor->_stylisticClass)
+	{
+		return NO;
+	}
+	
+	if (_stylisticTraits != otherFontDescriptor->_stylisticTraits)
+	{
+		return NO;
+	}
+
+	if (_fontName != otherFontDescriptor->_fontName)
+	{
+		if (![_fontName isEqualToString:_fontName])
+		{
+			return NO;
+		}
+	}
+	
+	if (_fontFamily != otherFontDescriptor->_fontFamily)
+	{
+		if (![_fontFamily isEqualToString:_fontFamily])
+		{
+			return NO;
+		}
+	}
+	
+	return YES;
 }
 
 
