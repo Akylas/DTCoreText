@@ -55,6 +55,8 @@ extern NSString * const DTDefaultStyleSheet;
 extern NSString * const DTUseiOS6Attributes;
 extern NSString * const DTWillFlushBlockCallBack;
 extern NSString * const DTProcessCustomHTMLAttributes;
+extern NSString * const DTIgnoreInlineStylesOption;
+
 
 // attributed string attribute constants
 
@@ -80,6 +82,9 @@ extern NSString * const DTListPrefixField;
 
 // iOS 6 compatibility
 extern BOOL ___useiOS6Attributes;
+
+// exceptions
+extern NSString * const DTCoreTextFontDescriptorException;
 
 // macros
 
@@ -177,3 +182,12 @@ typedef NS_ENUM(NSUInteger, DTCoreTextLayoutFrameLinePositioningOptions)
 	 */
 	DTCoreTextLayoutFrameLinePositioningOptionAlgorithmLegacy = 2
 };
+
+// layouting
+
+// the value to use if the width is unknown
+#define CGFLOAT_WIDTH_UNKNOWN 16777215.0f
+
+// the value to use if the height is unknown
+#define CGFLOAT_HEIGHT_UNKNOWN 16777215.0f
+
