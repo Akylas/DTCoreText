@@ -1891,6 +1891,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A060479316A8B5770000CAA1 /* DTAttributedLabel.h in Headers */,
 				A788C97214863E8700E1AFD9 /* DTCoreTextFontCollection.h in Headers */,
 				A788C97714863E8700E1AFD9 /* DTCoreTextFontDescriptor.h in Headers */,
 				A788C97C14863E8700E1AFD9 /* DTCoreTextGlyphRun.h in Headers */,
@@ -1938,7 +1939,6 @@
 				A7EB84D6168B9B1300D686B7 /* DTHorizontalRuleHTMLElement.h in Headers */,
 				A7EB84E6168C657100D686B7 /* DTListItemHTMLElement.h in Headers */,
 				A7EB853A168FA33500D686B7 /* DTStylesheetHTMLElement.h in Headers */,
-				A060479316A8B5770000CAA1 /* DTAttributedLabel.h in Headers */,
 				A70E62D716C24905009B47BF /* DTDictationPlaceholderTextAttachment.h in Headers */,
 				A70E62E116C24DDF009B47BF /* DTDictationPlaceholderView.h in Headers */,
 				A7AE580E1725374C00A9BF61 /* DTImageTextAttachment.h in Headers */,
@@ -2689,6 +2689,7 @@
 				A788C9BB14863E8700E1AFD9 /* DTTextAttachment.m in Sources */,
 				A788C9C014863E8700E1AFD9 /* DTWebVideoView.m in Sources */,
 				A788C9CA14863E8700E1AFD9 /* NSAttributedString+HTML.m in Sources */,
+				A060479616A8B5770000CAA1 /* DTAttributedLabel.m in Sources */,
 				A788C9D414863E8700E1AFD9 /* NSAttributedStringRunDelegates.m in Sources */,
 				A788C9D914863E8700E1AFD9 /* NSCharacterSet+HTML.m in Sources */,
 				A788C9E314863E8700E1AFD9 /* NSMutableAttributedString+HTML.m in Sources */,
@@ -2715,7 +2716,6 @@
 				A7EB84EA168C657100D686B7 /* DTListItemHTMLElement.m in Sources */,
 				A7EB8536168F336200D686B7 /* DTTextAttachmentHTMLElement.m in Sources */,
 				A7EB853E168FA33500D686B7 /* DTStylesheetHTMLElement.m in Sources */,
-				A060479616A8B5770000CAA1 /* DTAttributedLabel.m in Sources */,
 				A70E62DB16C24905009B47BF /* DTDictationPlaceholderTextAttachment.m in Sources */,
 				A70E62E416C24DDF009B47BF /* DTDictationPlaceholderView.m in Sources */,
 				A700289E16FB220B00AFEDA3 /* DTAnchorHTMLElement.m in Sources */,
