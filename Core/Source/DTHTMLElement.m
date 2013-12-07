@@ -311,6 +311,11 @@ NSDictionary *_classesForNames = nil;
 	{
 		[tmpDict setObject:DTNSNumberFromCGFloat(_backgroundCornerRadius) forKey:DTBackgroundCornerRadiusAttribute];
 	}
+	
+	if (_padding.left>0 || _padding.right>0 || _padding.top>0 || _padding.bottom>0)
+	{
+		[tmpDict setObject:[NSValue valueWithUIEdgeInsets:_padding] forKey:DTPaddingAttribute];
+	}
 		
 	return tmpDict;
 }
@@ -1396,6 +1401,7 @@ NSDictionary *_classesForNames = nil;
 	_backgroundStrokeColor = element.backgroundStrokeColor;
 	_backgroundStrokeWidth = element.backgroundStrokeWidth;
 	_backgroundCornerRadius = element.backgroundCornerRadius;
+	_padding = element.padding;
 	
 	// only inherit background-color from inline elements
 	if (element.displayStyle == DTHTMLElementDisplayStyleInline || element.displayStyle == DTHTMLElementDisplayStyleListItem)
