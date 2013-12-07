@@ -980,13 +980,13 @@
 	dispatch_group_async(_treeBuildingGroup, _treeBuildingQueue, ^{
 		NSAssert(!_currentTag, @"Something went wrong, at end of document there is still an open node");
 
-		dispatch_group_async(_stringAssemblyGroup, _stringAssemblyQueue, ^{
-			// trim off white space at end
-			while ([[_tmpString string] hasSuffixCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]])
-			{
-				[_tmpString deleteCharactersInRange:NSMakeRange([_tmpString length]-1, 1)];
-			}
-		});
+//		dispatch_group_async(_stringAssemblyGroup, _stringAssemblyQueue, ^{
+//			// trim off white space at end
+//			while ([[_tmpString string] hasSuffixCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]])
+//			{
+//				[_tmpString deleteCharactersInRange:NSMakeRange([_tmpString length]-1, 1)];
+//			}
+//		});
 	});
 }
 
