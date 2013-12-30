@@ -305,7 +305,7 @@
 	
 #if DTCORETEXT_FIX_14684188
 	// workaround, only necessary while rdar://14684188 is not fixed
-	_defaultTag.textColor = [UIColor blackColor];
+//	_defaultTag.textColor = [UIColor blackColor];
 #endif
 	
 	id defaultColor = [_options objectForKey:DTDefaultTextColor];
