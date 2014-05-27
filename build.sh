@@ -2,12 +2,11 @@
 
 set -e
 
-IOSSDK_VER="7.0"
 
 # xcodebuild -showsdks
 
-xcodebuild -project DTCoreText.xcodeproj -target "Static Library" -configuration Release -sdk iphoneos${IOSSDK_VER} build
-xcodebuild -project DTCoreText.xcodeproj -target "Static Library" -configuration Release -sdk iphonesimulator${IOSSDK_VER} build
+xcodebuild -project DTCoreText.xcodeproj -target "Static Library" -configuration Release -sdk iphoneos build
+xcodebuild -project DTCoreText.xcodeproj -target "Static Library" -configuration Release -sdk iphonesimulator build
 
 cd Build
 # for the fat lib file
