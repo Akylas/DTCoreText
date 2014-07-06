@@ -68,6 +68,7 @@
 	DTHTMLElement *_currentTag;
 	BOOL _ignoreParseEvents; // ignores events from parser after first HTML tag was finished
 	BOOL _ignoreInlineStyles; // ignores style blocks attached on elements
+	BOOL _ignoreLinkStyle; // ignores links style (a)
 }
 
 - (id)initWithHTML:(NSData *)data options:(NSDictionary *)options documentAttributes:(NSDictionary **)docAttributes
@@ -211,54 +212,63 @@
 	{
 		_defaultFontDescriptor.symbolicTraits = (CTFontSymbolicTraits)[traitsDefault integerValue];
 	}
+
 	
-	_defaultLinkColor = [_options objectForKey:DTDefaultLinkColor];
+	_ignoreLinkStyle = [[_options objectForKey:DTIgnoreLinkStyleOption] boolValue];
 	
-	if (_defaultLinkColor)
-	{
-		if ([_defaultLinkColor isKindOfClass:[NSString class]])
+	if (!_ignoreLinkStyle) {
+		_defaultLinkColor = [_options objectForKey:DTDefaultLinkColor];
+		
+		if (_defaultLinkColor)
 		{
-			// convert from string to color
-			_defaultLinkColor = DTColorCreateWithHTMLName((NSString *)_defaultLinkColor);
+			if ([_defaultLinkColor isKindOfClass:[NSString class]])
+			{
+				// convert from string to color
+				_defaultLinkColor = DTColorCreateWithHTMLName((NSString *)_defaultLinkColor);
+			}
+			
+			// get hex code for the passed color
+			NSString *colorHex = DTHexStringFromDTColor(_defaultLinkColor);
+			
+			// overwrite the style
+			NSString *styleBlock = [NSString stringWithFormat:@"a {color:#%@;}", colorHex];
+			[_globalStyleSheet parseStyleBlock:styleBlock];
 		}
 		
-		// get hex code for the passed color
-		NSString *colorHex = DTHexStringFromDTColor(_defaultLinkColor);
+		// default is to have A underlined
+		NSNumber *linkDecorationDefault = [_options objectForKey:DTDefaultLinkDecoration];
 		
-		// overwrite the style
-		NSString *styleBlock = [NSString stringWithFormat:@"a {color:#%@;}", colorHex];
-		[_globalStyleSheet parseStyleBlock:styleBlock];
-	}
-	
-	// default is to have A underlined
-	NSNumber *linkDecorationDefault = [_options objectForKey:DTDefaultLinkDecoration];
-	
-	if (linkDecorationDefault)
-	{
-		if (![linkDecorationDefault boolValue])
+		if (linkDecorationDefault)
 		{
-			// remove default decoration
-			[_globalStyleSheet parseStyleBlock:@"a {text-decoration:none;}"];
-		}
-	}
-	
-	DTColor *defaultLinkHighlightColor = [_options objectForKey:DTDefaultLinkHighlightColor];
-	
-	if (defaultLinkHighlightColor)
-	{
-		if ([defaultLinkHighlightColor isKindOfClass:[NSString class]])
-		{
-			// convert from string to color
-			defaultLinkHighlightColor = DTColorCreateWithHTMLName((NSString *)defaultLinkHighlightColor);
+			if (![linkDecorationDefault boolValue])
+			{
+				// remove default decoration
+				[_globalStyleSheet parseStyleBlock:@"a {text-decoration:none;}"];
+			}
 		}
 		
-		// get hex code for the passed color
-		NSString *colorHex = DTHexStringFromDTColor(defaultLinkHighlightColor);
+		DTColor *defaultLinkHighlightColor = [_options objectForKey:DTDefaultLinkHighlightColor];
 		
-		// overwrite the style
-		NSString *styleBlock = [NSString stringWithFormat:@"a:active {color:#%@;}", colorHex];
-		[_globalStyleSheet parseStyleBlock:styleBlock];
+		if (defaultLinkHighlightColor)
+		{
+			if ([defaultLinkHighlightColor isKindOfClass:[NSString class]])
+			{
+				// convert from string to color
+				defaultLinkHighlightColor = DTColorCreateWithHTMLName((NSString *)defaultLinkHighlightColor);
+			}
+			
+			// get hex code for the passed color
+			NSString *colorHex = DTHexStringFromDTColor(defaultLinkHighlightColor);
+			
+			// overwrite the style
+			NSString *styleBlock = [NSString stringWithFormat:@"a:active {color:#%@;}", colorHex];
+			[_globalStyleSheet parseStyleBlock:styleBlock];
+		}
 	}
+	else {
+		[_globalStyleSheet removeStyleForKey:@"a"];
+	}
+	
 	
 	// default paragraph style
 	_defaultParagraphStyle = [DTCoreTextParagraphStyle defaultParagraphStyle];
@@ -389,7 +399,7 @@
 	
 	void (^aBlock)(void) = ^
 	{
-		if (_currentTag.isColorInherited || !_currentTag.textColor)
+		if (!_ignoreLinkStyle && (_currentTag.isColorInherited || !_currentTag.textColor))
 		{
 			_currentTag.textColor = _defaultLinkColor;
 			_currentTag.isColorInherited = NO;
