@@ -55,6 +55,11 @@
 
 - (id)initWithLine:(CTLineRef)line stringLocationOffset:(NSInteger)stringLocationOffset
 {
+	if (!line)
+	{
+		return nil;
+	}
+	
 	if ((self = [super init]))
 	{
 		_line = line;
@@ -351,11 +356,32 @@
 				{
 					CTRunRef oneRun = CFArrayGetValueAtIndex(runs, i);
 					
+					CGPoint *positions = (CGPoint*)CTRunGetPositionsPtr(oneRun);
+					
+					BOOL shouldFreePositions = NO;
+					
+					if (positions == NULL) // Ptr gave NULL, we'll need to copy positions array and later free it
+					{
+						CFIndex glyphCount = CTRunGetGlyphCount(oneRun);
+						
+						shouldFreePositions = YES;
+						
+						size_t positionsBufferSize = sizeof(CGPoint) * glyphCount;
+						CGPoint *positionsBuffer = malloc(positionsBufferSize);
+						CTRunGetPositions(oneRun, CFRangeMake(0, 0), positionsBuffer);
+						positions = positionsBuffer;
+					}
+					
 					// assumption: position of first glyph is also the correct offset of the entire run
-					CGPoint position = *CTRunGetPositionsPtr(oneRun);
+					CGPoint position = positions[0];
 					
 					DTCoreTextGlyphRun *glyphRun = [[DTCoreTextGlyphRun alloc] initWithRun:oneRun layoutLine:self offset:position.x];
 					[tmpArray addObject:glyphRun];
+					
+					if ( shouldFreePositions )
+					{
+						free(positions);
+					}
 				}
 				
 				_glyphRuns = tmpArray;
