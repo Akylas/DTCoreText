@@ -18,6 +18,17 @@
 			name = Documentation;
 			productName = Documentation;
 		};
+		D5E0137A1BAB099E00149EA0 /* DTCoreText */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = D5E0137B1BAB099E00149EA0 /* Build configuration list for PBXAggregateTarget "DTCoreText" */;
+			buildPhases = (
+				D5E0137F1BAB09BD00149EA0 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = DTCoreText;
+			productName = DTCoreText;
+		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
@@ -344,7 +355,6 @@
 		A78EEA6316774B5F003B5540 /* UIFont+DTCoreText.h in Headers */ = {isa = PBXBuildFile; fileRef = A78EEA6016774B5F003B5540 /* UIFont+DTCoreText.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A78EEA6416774B5F003B5540 /* UIFont+DTCoreText.m in Sources */ = {isa = PBXBuildFile; fileRef = A78EEA6116774B5F003B5540 /* UIFont+DTCoreText.m */; };
 		A78EEA6516774B5F003B5540 /* UIFont+DTCoreText.m in Sources */ = {isa = PBXBuildFile; fileRef = A78EEA6116774B5F003B5540 /* UIFont+DTCoreText.m */; };
-		A7949A0014C6256B00A8CCDE /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A79499FF14C6256B00A8CCDE /* libxml2.dylib */; };
 		A7949A5014CC44D300A8CCDE /* DTCoreTextConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = A7949A4F14CC44D200A8CCDE /* DTCoreTextConstants.m */; };
 		A7949A5114CC44D300A8CCDE /* DTCoreTextConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = A7949A4F14CC44D200A8CCDE /* DTCoreTextConstants.m */; };
 		A7949A9D14CC566100A8CCDE /* DTCoreTextConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = A7949A9C14CC565F00A8CCDE /* DTCoreTextConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -454,7 +464,6 @@
 		A79BA6BD1B46A2700086C2F6 /* DTTextBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = A7081EA11503645F002987F1 /* DTTextBlock.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A79BA6BE1B46A2700086C2F6 /* DTTextBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = A7081EA215036460002987F1 /* DTTextBlock.m */; };
 		A79BA6C21B46A3630086C2F6 /* DTFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A79BA6551B46A1FB0086C2F6 /* DTFoundation.framework */; };
-		A79BA6C51B46A3AA0086C2F6 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A79BA6C41B46A3AA0086C2F6 /* libxml2.dylib */; };
 		A79BA6CD1B46A4250086C2F6 /* default.css in Sources */ = {isa = PBXBuildFile; fileRef = A76994F914DBB5F70047CC8D /* default.css */; };
 		A79BA8261B46E1360086C2F6 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A79BA8251B46E1360086C2F6 /* Launch Screen.xib */; };
 		A79BA8431B46E55D0086C2F6 /* DTFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A79BA6571B46A1FB0086C2F6 /* DTFoundation.framework */; };
@@ -533,7 +542,6 @@
 		A7B14E42183638D40007CF27 /* DTLog.h in Headers */ = {isa = PBXBuildFile; fileRef = A7B14E3E183638D30007CF27 /* DTLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7B14E4718363B5B0007CF27 /* NSString+DTUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A7B14E4618363B5B0007CF27 /* NSString+DTUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7B14E4818363B5B0007CF27 /* NSString+DTUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A7B14E4618363B5B0007CF27 /* NSString+DTUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A7C1CC0C14D6C4F0008D6468 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A79499FF14C6256B00A8CCDE /* libxml2.dylib */; };
 		A7C5D01614D7E3DC00AF1D75 /* DTImage+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C5D01414D7E3BB00AF1D75 /* DTImage+HTML.m */; };
 		A7C5D01714D7E3DC00AF1D75 /* DTImage+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C5D01414D7E3BB00AF1D75 /* DTImage+HTML.m */; };
 		A7C7ACD514D924B1005A9C69 /* NSMutableString+HTML.h in Headers */ = {isa = PBXBuildFile; fileRef = A7C7ACD314D924B1005A9C69 /* NSMutableString+HTML.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1260,7 +1268,6 @@
 		A78E3C50178D674300D17DCD /* DTCoreTextLayoutFrame+Cursor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DTCoreTextLayoutFrame+Cursor.m"; sourceTree = "<group>"; };
 		A78EEA6016774B5F003B5540 /* UIFont+DTCoreText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+DTCoreText.h"; sourceTree = "<group>"; };
 		A78EEA6116774B5F003B5540 /* UIFont+DTCoreText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+DTCoreText.m"; sourceTree = "<group>"; };
-		A79499FF14C6256B00A8CCDE /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		A7949A4514CAF58C00A8CCDE /* DTHTMLAttributedStringBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTHTMLAttributedStringBuilder.h; sourceTree = "<group>"; };
 		A7949A4614CAF58C00A8CCDE /* DTHTMLAttributedStringBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DTHTMLAttributedStringBuilder.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A7949A4F14CC44D200A8CCDE /* DTCoreTextConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DTCoreTextConstants.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -1273,7 +1280,6 @@
 		A7985E0B178ECD86005D40B2 /* DTHTMLWriterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTHTMLWriterTest.m; sourceTree = "<group>"; };
 		A7985E0C178ECD86005D40B2 /* DTHTMLWriterTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTHTMLWriterTest.h; sourceTree = "<group>"; };
 		A79BA6201B46A1FB0086C2F6 /* DTCoreText.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DTCoreText.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A79BA6C41B46A3AA0086C2F6 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/usr/lib/libxml2.dylib; sourceTree = DEVELOPER_DIR; };
 		A79BA8251B46E1360086C2F6 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		A79CA82317FC9648001EBA6E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		A79CA82517FC9651001EBA6E /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/MobileCoreServices.framework; sourceTree = DEVELOPER_DIR; };
@@ -1363,6 +1369,7 @@
 		A7F5672614D8506C00D1F167 /* NSAttributedString+SmallCaps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+SmallCaps.m"; sourceTree = "<group>"; };
 		A7F7EFCD1573603100F5A4D0 /* libDTCoreText_no_DTFoundation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDTCoreText_no_DTFoundation.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2CDBADA17CCD245000E4AD7 /* CSSOOMCrash.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = CSSOOMCrash.html; sourceTree = "<group>"; };
+		D5625CED1BAB104500C95BC0 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/usr/lib/libxml2.tbd; sourceTree = DEVELOPER_DIR; };
 		DDCCEB1D17005A4F009FF923 /* css.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = css.css; sourceTree = "<group>"; };
 		E2262DC61638331500BFDAD7 /* DTCoreText.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DTCoreText.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -1372,7 +1379,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7949A0014C6256B00A8CCDE /* libxml2.dylib in Frameworks */,
 				A788CA601486416A00E1AFD9 /* libDTCoreText.a in Frameworks */,
 				A75C6C72141798CE00AEE350 /* MobileCoreServices.framework in Frameworks */,
 				A704C93A13901FDB0045CFC6 /* ImageIO.framework in Frameworks */,
@@ -1419,7 +1425,6 @@
 				A788CA82148647BC00E1AFD9 /* ImageIO.framework in Frameworks */,
 				A788CA83148647C900E1AFD9 /* CoreText.framework in Frameworks */,
 				A788CAA5148648D700E1AFD9 /* QuartzCore.framework in Frameworks */,
-				A7C1CC0C14D6C4F0008D6468 /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1435,7 +1440,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A79BA6C51B46A3AA0086C2F6 /* libxml2.dylib in Frameworks */,
 				A79BA6C21B46A3630086C2F6 /* DTFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1495,8 +1499,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A79BA6C41B46A3AA0086C2F6 /* libxml2.dylib */,
-				A79499FF14C6256B00A8CCDE /* libxml2.dylib */,
+				D5625CED1BAB104500C95BC0 /* libxml2.tbd */,
 				A7C1CC0E14D6CFD5008D6468 /* AppKit.framework */,
 				A7DBE4F712E6E5B000F25897 /* AVFoundation.framework */,
 				A7F5671C14D8469000D1F167 /* Cocoa.framework */,
@@ -2508,6 +2511,9 @@
 					A79BA61F1B46A1FB0086C2F6 = {
 						CreatedOnToolsVersion = 6.4;
 					};
+					D5E0137A1BAB099E00149EA0 = {
+						CreatedOnToolsVersion = 7.0;
+					};
 				};
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "DTCoreText" */;
@@ -2540,6 +2546,7 @@
 				A7F7EF761573603100F5A4D0 /* Static Library (no DTFoundation) */,
 				E2262DC51638331500BFDAD7 /* DTCoreText (Mac) */,
 				A79BA61F1B46A1FB0086C2F6 /* DTCoreText (iOS) */,
+				D5E0137A1BAB099E00149EA0 /* DTCoreText */,
 			);
 		};
 /* End PBXProject section */
@@ -2882,6 +2889,19 @@
 			shellPath = /bin/sh;
 			shellScript = "echo \"Documentation Output directory: ${BUILD_DIR}/Documentation/\"\n/usr/local/bin/appledoc --print-settings  --output \"${BUILD_DIR}/Documentation/\" \"${PROJECT_DIR}\"\nexit $?";
 			showEnvVarsInLog = 0;
+		};
+		D5E0137F1BAB09BD00149EA0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script is based on Jacob Van Order's answer on apple dev forums https://devforums.apple.com/message/971277\n# See also http://spin.atomicobject.com/2011/12/13/building-a-universal-framework-for-ios/ for the start\n\n\n# To get this to work with a Xcode 6 Cocoa Touch Framework, create Framework\n# Then create a new Aggregate Target. Throw this script into a Build Script Phrase on the Aggregate\n\n\n######################\n# Options\n######################\n\nREVEAL_ARCHIVE_IN_FINDER=true\n\nFRAMEWORK_NAME=\"${PROJECT_NAME}\"\nFRAMEWORK_TARGET_NAME=\"${PROJECT_NAME} (iOS)\"\n\nSIMULATOR_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${FRAMEWORK_NAME}.framework\"\n\nDEVICE_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${FRAMEWORK_NAME}.framework\"\n\nUNIVERSAL_LIBRARY_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneuniversal\"\n\nFRAMEWORK=\"${UNIVERSAL_LIBRARY_DIR}/${FRAMEWORK_NAME}.framework\"\n\n\n######################\n# Build Frameworks\n######################\n\nxcodebuild -project ${PROJECT_NAME}.xcodeproj -sdk iphonesimulator -target \"${FRAMEWORK_TARGET_NAME}\" -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphonesimulator 2>&1\n\nxcodebuild -project ${PROJECT_NAME}.xcodeproj -sdk iphoneos -target \"${FRAMEWORK_TARGET_NAME}\" -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos 2>&1\n\n#xcodebuild -target ${PROJECT_NAME} ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\" | echo\n\n#xcodebuild -target ${PROJECT_NAME} ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphonesimulator  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\" | echo\n\n\n######################\n# Create directory for universal\n######################\n\nrm -rf \"${UNIVERSAL_LIBRARY_DIR}\"\n\nmkdir \"${UNIVERSAL_LIBRARY_DIR}\"\n\nmkdir \"${FRAMEWORK}\"\n\n\n######################\n# Copy files Framework\n######################\n\ncp -r \"${DEVICE_LIBRARY_PATH}/.\" \"${FRAMEWORK}\"\n\n\n######################\n# Make fat universal binary\n######################\n\nlipo \"${SIMULATOR_LIBRARY_PATH}/${FRAMEWORK_NAME}\" \"${DEVICE_LIBRARY_PATH}/${FRAMEWORK_NAME}\" -create -output \"${FRAMEWORK}/${FRAMEWORK_NAME}\" | echo\n\n\n######################\n# On Release, copy the result to desktop folder\n######################\n\nif [ \"${CONFIGURATION}\" == \"Release\" ]; then\nmkdir \"${HOME}/Desktop/${FRAMEWORK_NAME}-${CONFIGURATION}-iphoneuniversal/\"\ncp -r \"${FRAMEWORK}\" \"${HOME}/Desktop/${FRAMEWORK_NAME}-${CONFIGURATION}-iphoneuniversal/\"\nfi\n\n\n######################\n# If needed, open the Framework folder\n######################\n\nif [ ${REVEAL_ARCHIVE_IN_FINDER} = true ]; then\nif [ \"${CONFIGURATION}\" == \"Release\" ]; then\nopen \"${HOME}/Desktop/${FRAMEWORK_NAME}-${CONFIGURATION}-iphoneuniversal/\"\nelse\nopen \"${UNIVERSAL_LIBRARY_DIR}/\"\nfi\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -3725,8 +3745,9 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "Core/DTCoreText-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = DTCoreText;
 				SDKROOT = iphoneos;
@@ -3771,8 +3792,9 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "Core/DTCoreText-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = DTCoreText;
 				SDKROOT = iphoneos;
@@ -3818,8 +3840,9 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "Core/DTCoreText-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = DTCoreText;
 				SDKROOT = iphoneos;
@@ -4141,6 +4164,30 @@
 			};
 			name = Release;
 		};
+		D5E0137C1BAB099E00149EA0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		D5E0137D1BAB099E00149EA0 /* Coverage */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Coverage;
+		};
+		D5E0137E1BAB099E00149EA0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
 		E2262DD31638331500BFDAD7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4290,6 +4337,16 @@
 				C01FCF4F08A954540054247B /* Debug */,
 				A7DC5CFB17F833F1006ADDF5 /* Coverage */,
 				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D5E0137B1BAB099E00149EA0 /* Build configuration list for PBXAggregateTarget "DTCoreText" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5E0137C1BAB099E00149EA0 /* Debug */,
+				D5E0137D1BAB099E00149EA0 /* Coverage */,
+				D5E0137E1BAB099E00149EA0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
