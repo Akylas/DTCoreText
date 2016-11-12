@@ -11,6 +11,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 #import "DTTiledLayerWithoutFade.h"
+#import "DTWebVideoView.h"
 
 
 @interface DemoTextViewController ()
@@ -284,8 +285,6 @@
 	// this also compiles with iOS 6 SDK, but will work with later SDKs too
 	CGFloat topInset = [[self valueForKeyPath:@"topLayoutGuide.length"] floatValue];
 	CGFloat bottomInset = [[self valueForKeyPath:@"bottomLayoutGuide.length"] floatValue];
-	
-	NSLog(@"%f top", topInset);
 	
 	UIEdgeInsets outerInsets = UIEdgeInsetsMake(topInset, 0, bottomInset, 0);
 	UIEdgeInsets innerInsets = outerInsets;
@@ -739,7 +738,7 @@
 	
 	BOOL didUpdate = NO;
 	
-	// update all attachments that matchin this URL (possibly multiple images with same size)
+	// update all attachments that match this URL (possibly multiple images with same size)
 	for (DTTextAttachment *oneAttachment in [_textView.attributedTextContentView.layoutFrame textAttachmentsWithPredicate:pred])
 	{
 		// update attachments that have no original size, that also sets the display size
@@ -754,7 +753,10 @@
 	if (didUpdate)
 	{
 		// layout might have changed due to image sizes
-		[_textView relayoutText];
+		// do it on next run loop because a layout pass might be going on
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[_textView relayoutText];
+		});
 	}
 }
 
