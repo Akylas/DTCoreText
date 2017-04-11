@@ -144,6 +144,10 @@ The distance in points from the margin of a text container to the end of lines.
  */
 @property (nonatomic, assign) CTTextAlignment alignment;
 
+/**
+ The line break of the receiver.
+ */
+@property (nonatomic, assign) CTLineBreakMode linebreak;
 
 /**
  The base writing direction for the receiver.

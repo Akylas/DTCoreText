@@ -43,6 +43,7 @@ extern NSString * const NSAttachmentAttributeName;
 
 extern NSString * const DTMaxImageSize;
 extern NSString * const DTDefaultFontFamily;
+extern NSString * const DTDefaultFontStyle;
 extern NSString * const DTDefaultFontName;
 extern NSString * const DTDefaultFontSize;
 extern NSString * const DTDefaultTextColor;
@@ -50,6 +51,7 @@ extern NSString * const DTDefaultLinkColor;
 extern NSString * const DTDefaultLinkDecoration;
 extern NSString * const DTDefaultLinkHighlightColor;
 extern NSString * const DTDefaultTextAlignment;
+extern NSString * const DTDefaultLineBreakMode;
 extern NSString * const DTDefaultLineHeightMultiplier;
 extern NSString * const DTDefaultLineHeightMultiplier;
 extern NSString * const DTDefaultFirstLineHeadIndent;
@@ -59,6 +61,7 @@ extern NSString * const DTUseiOS6Attributes;
 extern NSString * const DTWillFlushBlockCallBack;
 extern NSString * const DTProcessCustomHTMLAttributes;
 extern NSString * const DTIgnoreInlineStylesOption;
+extern NSString * const DTIgnoreLinkStyleOption;
 extern NSString * const DTDocumentPreserveTrailingSpaces;
 
 
@@ -82,7 +85,7 @@ extern NSString * const DTAscentMultiplierAttribute;
 extern NSString * const DTBackgroundStrokeColorAttribute;
 extern NSString * const DTBackgroundStrokeWidthAttribute;
 extern NSString * const DTBackgroundCornerRadiusAttribute;
-
+extern NSString * const DTPaddingAttribute;
 // field constants
 
 extern NSString * const DTListPrefixField;

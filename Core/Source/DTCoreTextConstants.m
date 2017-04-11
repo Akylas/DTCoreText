@@ -17,6 +17,7 @@ NSString * const NSAttachmentAttributeName = @"NSAttachmentAttributeName";
 
 NSString * const DTMaxImageSize = @"DTMaxImageSize";
 NSString * const DTDefaultFontFamily = @"DTDefaultFontFamily";
+NSString * const DTDefaultFontStyle = @"DTDefaultFontStyle";
 NSString * const DTDefaultFontName = @"DTDefaultFontName";
 NSString * const DTDefaultFontSize = @"DTDefaultFontSize";
 NSString * const DTDefaultTextColor = @"DTDefaultTextColor";
@@ -24,6 +25,7 @@ NSString * const DTDefaultLinkColor = @"DTDefaultLinkColor";
 NSString * const DTDefaultLinkHighlightColor = @"DTDefaultLinkHighlightColor";
 NSString * const DTDefaultLinkDecoration = @"DTDefaultLinkDecoration";
 NSString * const DTDefaultTextAlignment = @"DTDefaultTextAlignment";
+NSString * const DTDefaultLineBreakMode = @"DTDefaultLineBreakMode";
 NSString * const DTDefaultLineHeightMultiplier = @"DTDefaultLineHeightMultiplier";
 NSString * const DTDefaultFirstLineHeadIndent = @"DTDefaultFirstLineHeadIndent";
 NSString * const DTDefaultHeadIndent = @"DTDefaultHeadIndent";
@@ -32,6 +34,7 @@ NSString * const DTUseiOS6Attributes = @"DTUseiOS6Attributes";
 NSString * const DTWillFlushBlockCallBack = @"DTWillFlushBlockCallBack";
 NSString * const DTProcessCustomHTMLAttributes = @"DTProcessCustomHTMLAttributes";
 NSString * const DTIgnoreInlineStylesOption = @"DTIgnoreInlineStyles";
+NSString * const DTIgnoreLinkStyleOption = @"DTIgnoreLinkStyle";
 NSString * const DTDocumentPreserveTrailingSpaces = @"DTDocumentPreserveTrailingSpaces";
 
 // attributed string attribute constants
@@ -54,6 +57,7 @@ NSString * const DTAscentMultiplierAttribute = @"DTAscentMultiplierAttribute";
 NSString * const DTBackgroundStrokeColorAttribute = @"DTBackgroundStrokeColor";
 NSString * const DTBackgroundStrokeWidthAttribute = @"DTBackgroundStrokeWidth";
 NSString * const DTBackgroundCornerRadiusAttribute = @"DTBackgroundCornerRadius";
+NSString * const DTPaddingAttribute = @"DTPadding";
 
 // field constants
 NSString * const DTListPrefixField = @"{listprefix}";

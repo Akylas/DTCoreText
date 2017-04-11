@@ -8,6 +8,7 @@
 
 #import "CTLineUtils.h"
 
+
 BOOL areLinesEqual(CTLineRef line1, CTLineRef line2)
 {
 	if(line1 == nil || line2 == nil) {
@@ -60,7 +61,6 @@ BOOL areLinesEqual(CTLineRef line1, CTLineRef line2)
         
         if (glyphs1 != NULL)
             free(glyphs1);
-        
         if (glyphs2 != NULL)
             free(glyphs2);
         

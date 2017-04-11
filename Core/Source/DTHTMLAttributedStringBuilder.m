@@ -8,13 +8,14 @@
 
 #import <DTFoundation/DTLog.h>
 #import <DTFoundation/DTHTMLParser.h>
+#import <DTFoundation/NSString+DTURLEncoding.h>
 
 #import "DTHTMLAttributedStringBuilder.h"
 
 #import "DTTextHTMLElement.h"
 #import "DTBreakHTMLElement.h"
 #import "DTStylesheetHTMLElement.h"
-#import "DTCSSStylesheet.h"
+#import "DTCSSStyleSheet.h"
 #import "DTCoreTextFontDescriptor.h"
 #import "DTHTMLParserTextNode.h"
 
@@ -81,6 +82,7 @@
 	DTHTMLElement *_currentTag;
 	BOOL _ignoreParseEvents; // ignores events from parser after first HTML tag was finished
 	BOOL _ignoreInlineStyles; // ignores style blocks attached on elements
+	BOOL _ignoreLinkStyle; // ignores links style (a)
 	BOOL _preserverDocumentTrailingSpaces; // don't remove spaces at end of document
 }
 
@@ -219,6 +221,13 @@
 	{
 		_defaultFontDescriptor.fontFamily = @"Times New Roman";
 	}
+    
+    NSNumber *traitsDefault = [_options objectForKey:DTDefaultFontStyle];
+	if (traitsDefault)
+	{
+		_defaultFontDescriptor.symbolicTraits = (CTFontSymbolicTraits)[traitsDefault integerValue];
+	}
+
 
 	NSString *defaultFontName = [_options objectForKey:DTDefaultFontName];
 
@@ -227,53 +236,61 @@
 	}
 
 	
-	_defaultLinkColor = [_options objectForKey:DTDefaultLinkColor];
+	_ignoreLinkStyle = [[_options objectForKey:DTIgnoreLinkStyleOption] boolValue];
 	
-	if (_defaultLinkColor)
-	{
-		if ([_defaultLinkColor isKindOfClass:[NSString class]])
+	if (!_ignoreLinkStyle) {
+		_defaultLinkColor = [_options objectForKey:DTDefaultLinkColor];
+		
+		if (_defaultLinkColor)
 		{
-			// convert from string to color
-			_defaultLinkColor = DTColorCreateWithHTMLName((NSString *)_defaultLinkColor);
+			if ([_defaultLinkColor isKindOfClass:[NSString class]])
+			{
+				// convert from string to color
+				_defaultLinkColor = DTColorCreateWithHTMLName((NSString *)_defaultLinkColor);
+			}
+			
+			// get hex code for the passed color
+			NSString *colorHex = DTHexStringFromDTColor(_defaultLinkColor);
+			
+			// overwrite the style
+			NSString *styleBlock = [NSString stringWithFormat:@"a {color:#%@;}", colorHex];
+			[_globalStyleSheet parseStyleBlock:styleBlock];
 		}
 		
-		// get hex code for the passed color
-		NSString *colorHex = DTHexStringFromDTColor(_defaultLinkColor);
+		// default is to have A underlined
+		NSNumber *linkDecorationDefault = [_options objectForKey:DTDefaultLinkDecoration];
 		
-		// overwrite the style
-		NSString *styleBlock = [NSString stringWithFormat:@"a {color:#%@;}", colorHex];
-		[_globalStyleSheet parseStyleBlock:styleBlock];
-	}
-	
-	// default is to have A underlined
-	NSNumber *linkDecorationDefault = [_options objectForKey:DTDefaultLinkDecoration];
-	
-	if (linkDecorationDefault)
-	{
-		if (![linkDecorationDefault boolValue])
+		if (linkDecorationDefault)
 		{
-			// remove default decoration
-			[_globalStyleSheet parseStyleBlock:@"a {text-decoration:none;}"];
-		}
-	}
-	
-	DTColor *defaultLinkHighlightColor = [_options objectForKey:DTDefaultLinkHighlightColor];
-	
-	if (defaultLinkHighlightColor)
-	{
-		if ([defaultLinkHighlightColor isKindOfClass:[NSString class]])
-		{
-			// convert from string to color
-			defaultLinkHighlightColor = DTColorCreateWithHTMLName((NSString *)defaultLinkHighlightColor);
+			if (![linkDecorationDefault boolValue])
+			{
+				// remove default decoration
+				[_globalStyleSheet parseStyleBlock:@"a {text-decoration:none;}"];
+			}
 		}
 		
-		// get hex code for the passed color
-		NSString *colorHex = DTHexStringFromDTColor(defaultLinkHighlightColor);
+		DTColor *defaultLinkHighlightColor = [_options objectForKey:DTDefaultLinkHighlightColor];
 		
-		// overwrite the style
-		NSString *styleBlock = [NSString stringWithFormat:@"a:active {color:#%@;}", colorHex];
-		[_globalStyleSheet parseStyleBlock:styleBlock];
+		if (defaultLinkHighlightColor)
+		{
+			if ([defaultLinkHighlightColor isKindOfClass:[NSString class]])
+			{
+				// convert from string to color
+				defaultLinkHighlightColor = DTColorCreateWithHTMLName((NSString *)defaultLinkHighlightColor);
+			}
+			
+			// get hex code for the passed color
+			NSString *colorHex = DTHexStringFromDTColor(defaultLinkHighlightColor);
+			
+			// overwrite the style
+			NSString *styleBlock = [NSString stringWithFormat:@"a:active {color:#%@;}", colorHex];
+			[_globalStyleSheet parseStyleBlock:styleBlock];
+		}
 	}
+	else {
+		[_globalStyleSheet removeStyleForKey:@"a"];
+	}
+	
 	
 	// default paragraph style
 	_defaultParagraphStyle = [DTCoreTextParagraphStyle defaultParagraphStyle];
@@ -291,6 +308,13 @@
 	if (defaultTextAlignmentNum)
 	{
 		_defaultParagraphStyle.alignment = (CTTextAlignment)[defaultTextAlignmentNum integerValue];
+	}
+	
+    NSNumber *defaultLineBreakNum = [_options objectForKey:DTDefaultLineBreakMode];
+	
+	if (defaultLineBreakNum)
+	{
+		_defaultParagraphStyle.linebreak = (CTLineBreakMode)[defaultLineBreakNum integerValue];
 	}
 	
 	NSNumber *defaultFirstLineHeadIndent = [_options objectForKey:DTDefaultFirstLineHeadIndent];
@@ -313,7 +337,7 @@
 	
 #if DTCORETEXT_FIX_14684188
 	// workaround, only necessary while rdar://14684188 is not fixed
-	_defaultTag.textColor = [UIColor blackColor];
+//	_defaultTag.textColor = [UIColor blackColor];
 #endif
 	
 	id defaultColor = [_options objectForKey:DTDefaultTextColor];
@@ -400,7 +424,7 @@
 	
 	void (^aBlock)(void) = ^
 	{
-		if (_currentTag.isColorInherited || !_currentTag.textColor)
+		if (!_ignoreLinkStyle && (_currentTag.isColorInherited || !_currentTag.textColor))
 		{
 			_currentTag.textColor = _defaultLinkColor;
 			_currentTag.isColorInherited = NO;
@@ -421,7 +445,7 @@
 		
 		NSURL *link = [NSURL URLWithString:cleanString];
         if (link == nil) {
-            link = [NSURL URLWithString:[cleanString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            link = [NSURL URLWithString:[cleanString stringByURLEncoding]];
         }
 		
 		// deal with relative URL
@@ -513,7 +537,18 @@
 	};
 	[_tagStartHandlers setObject:[h6Block copy] forKey:@"h6"];
 	
+    void (^smallBlock)(void) = ^
+	{
+		_currentTag.fontDescriptor.pointSize -= _textScale * 1;
+	};
+	[_tagStartHandlers setObject:[smallBlock copy] forKey:@"small"];
 	
+    void (^bigBlock)(void) = ^
+	{
+		_currentTag.fontDescriptor.pointSize += _textScale * 1;
+	};
+	[_tagStartHandlers setObject:[bigBlock copy] forKey:@"big"];
+
 	void (^fontBlock)(void) = ^
 	{
 		CGFloat pointSize;
@@ -588,15 +623,7 @@
 	
 	void (^pBlock)(void) = ^
 	{
-		// if have the custom headIndent
-		if (_defaultParagraphStyle.firstLineHeadIndent > 0)
-		{
-			_currentTag.paragraphStyle.firstLineHeadIndent = _currentTag.paragraphStyle.headIndent + _defaultParagraphStyle.firstLineHeadIndent;
-		}
-		else
-		{
-			_currentTag.paragraphStyle.firstLineHeadIndent = _currentTag.paragraphStyle.headIndent + _currentTag.pTextIndent;
-		}
+		_currentTag.paragraphStyle.firstLineHeadIndent = _currentTag.paragraphStyle.headIndent + _defaultParagraphStyle.firstLineHeadIndent;
 	};
 	
 	[_tagStartHandlers setObject:[pBlock copy] forKey:@"p"];

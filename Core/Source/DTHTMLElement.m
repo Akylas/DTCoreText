@@ -223,6 +223,9 @@ NSDictionary *_classesForNames = nil;
 			[tmpDict setObject:(id)[_textColor CGColor] forKey:(id)kCTForegroundColorAttributeName];
 		}
 	}
+	else {
+		[tmpDict setObject:[NSNumber numberWithBool:YES] forKey:(id)kCTForegroundColorFromContextAttributeName];
+	}
 	
 	if (_backgroundColor)
 	{
@@ -326,6 +329,11 @@ NSDictionary *_classesForNames = nil;
 	if (_backgroundCornerRadius != 0)
 	{
 		[tmpDict setObject:DTNSNumberFromCGFloat(_backgroundCornerRadius) forKey:DTBackgroundCornerRadiusAttribute];
+	}
+	
+	if (_padding.left>0 || _padding.right>0 || _padding.top>0 || _padding.bottom>0)
+	{
+		[tmpDict setObject:[NSValue valueWithUIEdgeInsets:_padding] forKey:DTPaddingAttribute];
 	}
 		
 	return tmpDict;
@@ -1328,12 +1336,6 @@ NSDictionary *_classesForNames = nil;
 		_backgroundCornerRadius = 0.0f;
 	}
 	
-	NSString *textIndentStr = [styles objectForKey:@"text-indent"];
-	if (textIndentStr && [textIndentStr isCSSLengthValue])
-	{
-		_pTextIndent = [textIndentStr pixelSizeOfCSSMeasureRelativeToCurrentTextSize:_currentTextSize textScale:_textScale];
-	}
-	
 	BOOL needsTextBlock = (_backgroundColor!=nil || _backgroundStrokeColor!=nil || _backgroundCornerRadius > 0 || _backgroundStrokeWidth > 0);
 	
 	BOOL hasMargins = NO;
@@ -1533,6 +1535,7 @@ NSDictionary *_classesForNames = nil;
 	_backgroundStrokeColor = element.backgroundStrokeColor;
 	_backgroundStrokeWidth = element.backgroundStrokeWidth;
 	_backgroundCornerRadius = element.backgroundCornerRadius;
+	_padding = element.padding;
 	
 	// only inherit background-color from inline elements
 	if (element.displayStyle == DTHTMLElementDisplayStyleInline || element.displayStyle == DTHTMLElementDisplayStyleListItem)
@@ -1733,7 +1736,6 @@ NSDictionary *_classesForNames = nil;
 @synthesize backgroundStrokeWidth = _backgroundStrokeWidth;
 @synthesize backgroundCornerRadius = _backgroundCornerRadius;
 @synthesize letterSpacing = _letterSpacing;
-@synthesize pTextIndent = _pTextIndent;
 
 @end
 

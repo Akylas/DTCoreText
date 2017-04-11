@@ -678,6 +678,10 @@ extern unsigned int default_css_len;
 	}
 }
 
+- (void)removeStyleForKey:(NSString *)key {
+	[_styles removeObjectForKey:key];
+}
+
 - (void)_addStyles:(NSDictionary *)styles withSelector:(NSString *)selector {
 	[_styles setObject:styles forKey:selector];
 	
